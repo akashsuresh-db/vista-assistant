@@ -1,0 +1,52 @@
+# Vista Assistant — workspace configuration
+#
+# Copy this file to `config.yaml` and edit the values for YOUR workspace.
+# `config.yaml` is gitignored, so your workspace details never get committed.
+#
+#   cp config.example.yaml config.yaml
+#
+# Every script reads this one file, so there are no hardcoded workspace values anywhere
+# else in the repo.
+
+# ---------------------------------------------------------------- connection
+# The Databricks CLI profile to use (see ~/.databrickscfg).
+# Create one with:  databricks auth login --profile <name>
+profile: my-workspace
+
+# SQL warehouse that runs the data build. Serverless is fine and cheapest.
+# Find the id in the workspace UI: SQL Warehouses -> your warehouse -> Connection details,
+# or run:  databricks warehouses list -p <profile>
+warehouse_id: REPLACE_ME
+
+# ------------------------------------------------------------- unity catalog
+# Where the demo objects are created. The schema is created for you; the catalog must
+# already exist and you need CREATE SCHEMA on it.
+catalog: main
+schema: vista_assistant
+
+# Name of the UC Volume that holds the policy documents.
+volume: vista_documents
+
+# ------------------------------------------------------------------ the app
+# Databricks App name. Must be unique in the workspace and lowercase-with-hyphens.
+app_name: vista-assistant
+
+# --------------------------------------------------- Agent Bricks resources
+# These are created through the Agent Bricks UI (there is no creation API for them yet),
+# so you fill them in AFTER running the relevant setup steps. See docs/SETUP.md.
+#
+# The Genie space IS created by the setup script, which prints its id — paste it here.
+genie_space_id: ""
+
+# Knowledge Assistant serving endpoint, e.g. ka-1a2b3c4d-endpoint
+ka_endpoint: ""
+
+# Supervisor Agent serving endpoint, e.g. mas-1a2b3c4d-endpoint
+supervisor_endpoint: ""
+
+# ------------------------------------------------------------------ options
+# Currency shown in generated data and charts. Purely cosmetic.
+reporting_currency: USD
+
+# Accent colour used by the app and the charts. Defaults to Accenture purple.
+accent_colour: "#a100ff"

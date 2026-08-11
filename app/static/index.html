@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Vista Assistant</title>
+<link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+<div class="shell">
+  <header class="top">
+    <span class="mark">&gt;</span>
+    <span class="wordmark">Vista Assistant<span>Finance &amp; Accounting</span></span>
+  </header>
+
+  <main class="stage" id="stage">
+    <div class="hero">
+      <h1>Ask anything about the <b>numbers</b><br />or the <b>policy</b> behind them.</h1>
+    </div>
+
+    <div id="thread" class="thread"></div>
+
+    <footer class="composer">
+      <div class="inputwrap">
+        <textarea id="q" rows="1" placeholder="Ask a question about the month-end position…"></textarea>
+        <button id="send" title="Ask" aria-label="Ask">&#8593;</button>
+      </div>
+      <div class="hint">Enter to send · Shift+Enter for a new line</div>
+    </footer>
+
+    <div id="starters" class="starters">
+      <div class="starters-label">Try one of these</div>
+      <div class="starters-grid" id="starters-grid"></div>
+    </div>
+  </main>
+</div>
+<!-- Vega bundles are vendored rather than loaded from a CDN: Databricks Apps run behind a
+     proxy that cannot be relied on for outbound fetches, and this keeps the app airgapped. -->
+<script src="/vendor/vega.min.js"></script>
+<script src="/vendor/vega-lite.min.js"></script>
+<script src="/vendor/vega-embed.min.js"></script>
+<script src="/app.js"></script>
+</body>
+</html>

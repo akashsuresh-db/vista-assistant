@@ -1,0 +1,545 @@
+/* Vista Assistant — Accenture theme, minimal single-input layout.
+ *
+ * Palette is Accenture's: purple #A100FF as the only accent, on white with near-black
+ * text. Everything else is greyscale, so the one purple carries all the emphasis.
+ *
+ * Two layout states, driven by `body.chatting`:
+ *   idle     — nothing but the wordmark and one centred search bar
+ *   chatting — the thread fills the page and the same input docks to the bottom
+ */
+
+:root {
+  --purple: #a100ff;
+  --purple-deep: #7500c0;
+  --purple-dark: #460073;
+  --purple-wash: #f7f0ff;
+  --purple-line: #e6d4ff;
+
+  --ink: #0d0d0d;
+  --ink-2: #4a4a4a;
+  --ink-3: #767676;
+  --line: #e4e4e7;
+  --bg: #ffffff;
+  --bg-soft: #fafafa;
+  --bad: #c2185b;
+
+  --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, monospace;
+  --sans: "Graphik", -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Roboto, sans-serif;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  height: 100%;
+  background: var(--bg);
+  color: var(--ink);
+  font: 15px/1.6 var(--sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+.shell {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ------------------------------------------------------------------- wordmark */
+.top {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 20px 26px;
+}
+.mark {
+  font-size: 21px;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--purple);
+  transform: translateY(-1px);
+}
+.wordmark {
+  font-size: 14.5px;
+  font-weight: 600;
+  letter-spacing: -0.1px;
+}
+.wordmark span {
+  font-weight: 400;
+  color: var(--ink-3);
+  margin-left: 7px;
+}
+
+/* --------------------------------------------------------------------- centre */
+/* Idle: the stage is vertically centred and holds only the input.
+   Chatting: the stage becomes a scrolling thread. */
+.stage {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0 26px;
+  overflow-y: auto;
+  /* sit a little above true centre — optically centred reads better than
+     mathematically centred once the header is accounted for */
+  padding-bottom: 7vh;
+}
+body.chatting .stage {
+  justify-content: flex-start;
+  padding-top: 14px;
+  padding-bottom: 0;
+}
+
+.hero {
+  width: 100%;
+  max-width: 680px;
+  text-align: center;
+  margin-bottom: 26px;
+}
+.hero h1 {
+  margin: 0;
+  font-size: 30px;
+  line-height: 1.22;
+  letter-spacing: -0.7px;
+  font-weight: 600;
+}
+.hero h1 b {
+  color: var(--purple);
+  font-weight: 600;
+}
+body.chatting .hero { display: none; }
+
+/* ------------------------------------------------------------------- composer */
+/* One element in two positions: centred while idle, docked while chatting. */
+.composer {
+  width: 100%;
+  max-width: 680px;
+  flex: none;
+}
+body.chatting .composer {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 12px 26px 20px;
+  background: linear-gradient(to top, var(--bg) 62%, transparent);
+}
+
+.inputwrap {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  background: var(--bg);
+  border: 1.5px solid var(--line);
+  border-radius: 28px;
+  padding: 7px 7px 7px 20px;
+  transition: border-color .15s, box-shadow .15s;
+}
+.inputwrap:focus-within {
+  border-color: var(--purple);
+  box-shadow: 0 0 0 4px rgba(161, 0, 255, .09);
+}
+
+#q {
+  flex: 1;
+  border: 0;
+  outline: 0;
+  resize: none;
+  background: transparent;
+  font: inherit;
+  font-size: 15.5px;
+  line-height: 1.5;
+  color: var(--ink);
+  padding: 9px 0;
+  max-height: 168px;
+}
+#q::placeholder { color: var(--ink-3); }
+
+#send {
+  flex: none;
+  width: 38px;
+  height: 38px;
+  border: 0;
+  border-radius: 50%;
+  background: var(--purple);
+  color: #fff;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  font-size: 16px;
+  line-height: 1;
+  transition: background .15s, opacity .15s;
+}
+#send:hover:not(:disabled) { background: var(--purple-deep); }
+#send:disabled { opacity: .32; cursor: default; }
+
+.hint {
+  margin: 10px 2px 0;
+  font-size: 11.5px;
+  color: var(--ink-3);
+  text-align: center;
+}
+body.chatting .hint { display: none; }
+
+/* ------------------------------------------------------------------- starters */
+/* Shown only on the idle screen, so a first-time user has somewhere to begin. */
+.starters {
+  width: 100%;
+  max-width: 680px;
+  margin-top: 26px;
+}
+body.chatting .starters { display: none; }
+
+.starters-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .7px;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  text-align: center;
+  margin-bottom: 11px;
+}
+.starters-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+.starter {
+  text-align: left;
+  cursor: pointer;
+  font: inherit;
+  font-size: 13.5px;
+  line-height: 1.45;
+  color: var(--ink);
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 12px 14px;
+  transition: border-color .13s, background .13s, transform .13s;
+}
+.starter:hover {
+  border-color: var(--purple);
+  background: var(--purple-wash);
+  transform: translateY(-1px);
+}
+.starter em {
+  display: block;
+  font-style: normal;
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: .4px;
+  text-transform: uppercase;
+  color: var(--purple);
+  margin-bottom: 4px;
+}
+
+/* ----------------------------------------------------------------------- trace */
+/* The live "working" tile: greyed and visually subordinate so nothing in it can be
+   mistaken for the answer. Open while working, collapsed once the answer lands. */
+.trace {
+  margin: 0 0 14px;
+  background: var(--bg-soft);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 9px 12px;
+}
+.trace > summary {
+  cursor: pointer;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: .2px;
+  color: var(--ink-3);
+}
+.trace > summary::-webkit-details-marker { display: none; }
+.trace > summary::after {
+  content: "▸";
+  margin-left: auto;
+  font-size: 10px;
+  transition: transform .15s;
+}
+.trace[open] > summary::after { transform: rotate(90deg); }
+.trace > summary:hover { color: var(--ink-2); }
+.trace.done > summary { color: var(--ink-3); }
+.trace.done > summary:hover { color: var(--purple-deep); }
+
+/* small pulsing dot while work is in flight */
+.trace-live {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--purple);
+  animation: pulse 1.3s infinite ease-in-out;
+  flex: none;
+}
+
+.trace-body {
+  margin-top: 9px;
+  max-height: 230px;
+  overflow-y: auto;
+  font-family: var(--mono);
+  font-size: 11.5px;
+  line-height: 1.55;
+  color: var(--ink-3);
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+.trace-line { margin: 0 0 5px; }
+.trace-call {
+  color: var(--purple-deep);
+  font-weight: 600;
+  font-family: var(--sans);
+  font-size: 12px;
+  margin-top: 8px;
+}
+.trace-result { color: #8a8a8a; }
+
+/* ---------------------------------------------------------------------- charts */
+.chart {
+  margin: 6px 0 16px;
+  width: 100%;
+  overflow-x: auto;   /* only engages if a chart really exceeds the column */
+}
+/* vega-embed injects its own wrapper; make it fill the column and keep the actions
+   menu discreet until hovered */
+.chart .vega-embed { width: 100%; }
+.chart .vega-embed summary {
+  opacity: 0;
+  transition: opacity .15s;
+  box-shadow: none;
+  color: var(--ink-3);
+}
+.chart:hover .vega-embed summary { opacity: 1; }
+/* Do NOT put `max-width: 100%` on the canvas. Vega sizes the canvas to include the axis
+   gutter; scaling that bitmap down with CSS squeezes the labels underneath the bars — which
+   is exactly what looked like "overlapping labels". Let Vega own the geometry and scroll if
+   a chart is genuinely wider than the column. */
+.chart canvas, .chart svg { max-width: none; }
+
+.err-hint {
+  margin: 7px 0 0;
+  font-size: 12px;
+  color: var(--ink-3);
+}
+
+.chart-err {
+  margin: 6px 0 14px;
+  font-size: 12.5px;
+  color: var(--ink-3);
+  background: var(--bg-soft);
+  border: 1px dashed var(--line);
+  border-radius: 8px;
+  padding: 10px 12px;
+}
+
+/* --------------------------------------------------------------------- sources */
+/* Collapsed by default: the answer is the point, provenance is one click away. */
+.sources {
+  margin-top: 16px;
+  border-top: 1px solid var(--line);
+  padding-top: 12px;
+}
+.sources > summary {
+  cursor: pointer;
+  list-style: none;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: .3px;
+  color: var(--purple-deep);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.sources > summary::-webkit-details-marker { display: none; }
+.sources > summary::before {
+  content: "▸";
+  font-size: 10px;
+  transition: transform .15s;
+}
+.sources[open] > summary::before { transform: rotate(90deg); }
+.sources > summary:hover { color: var(--purple); }
+
+.src {
+  margin: 11px 0 0;
+  padding-left: 13px;
+  border-left: 2px solid var(--purple-line);
+}
+.src-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 7px;
+  font-size: 13px;
+}
+.src-title { font-weight: 600; }
+.src-title a { color: var(--purple-deep); text-decoration: none; }
+.src-title a:hover { text-decoration: underline; }
+.src-meta {
+  font-size: 11px;
+  color: var(--ink-3);
+  font-variant-numeric: tabular-nums;
+}
+.src-kind {
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: .5px;
+  text-transform: uppercase;
+  color: var(--purple);
+  background: var(--purple-wash);
+  border: 1px solid var(--purple-line);
+  border-radius: 3px;
+  padding: 1px 5px;
+}
+.src-quote {
+  margin: 5px 0 0;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--ink-2);
+  font-style: italic;
+}
+.src-quote::before { content: "“"; }
+.src-quote::after { content: "”"; }
+
+/* --------------------------------------------------------------------- thread */
+.thread {
+  width: 100%;
+  max-width: 760px;
+  margin: 0 auto;
+  display: none;
+}
+body.chatting .thread { display: block; }
+
+.msg { margin: 0 0 26px; }
+
+.msg.user .body {
+  font-size: 17px;
+  font-weight: 600;
+  letter-spacing: -0.2px;
+  line-height: 1.4;
+  padding-bottom: 2px;
+}
+.msg.assistant .body { color: var(--ink); }
+
+/* a thin purple rule marks where the answer starts */
+.msg.assistant {
+  border-left: 2px solid var(--purple-line);
+  padding-left: 18px;
+  margin-left: 1px;
+}
+
+.body p { margin: 0 0 11px; }
+.body p:last-child { margin-bottom: 0; }
+.body h3, .body h4, .body h5 {
+  margin: 18px 0 8px;
+  font-size: 14.5px;
+  font-weight: 650;
+  letter-spacing: -0.1px;
+  color: var(--ink);
+}
+.body ul, .body ol { margin: 0 0 12px; padding-left: 21px; }
+.body li { margin: 4px 0; }
+.body li::marker { color: var(--purple); }
+.body strong { font-weight: 650; color: var(--purple-dark); }
+.body a { color: var(--purple-deep); }
+.body code {
+  font-family: var(--mono);
+  font-size: 12.5px;
+  background: var(--purple-wash);
+  border: 1px solid var(--purple-line);
+  padding: 1px 5px;
+  border-radius: 4px;
+}
+.body pre {
+  background: #141414;
+  color: #ececec;
+  padding: 13px 15px;
+  border-radius: 8px;
+  overflow-x: auto;
+  font-size: 12.5px;
+  line-height: 1.55;
+}
+.body pre code { background: none; border: none; color: inherit; padding: 0; }
+
+/* --------------------------------------------------------------------- tables */
+.tbl-wrap { overflow-x: auto; margin: 6px 0 16px; }
+.chat-tbl {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 13px;
+}
+.chat-tbl th {
+  text-align: left;
+  font-weight: 600;
+  font-size: 11.5px;
+  letter-spacing: .4px;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  padding: 0 13px 8px;
+  border-bottom: 1.5px solid var(--purple);
+  white-space: nowrap;
+}
+.chat-tbl td {
+  padding: 8px 13px;
+  border-bottom: 1px solid var(--line);
+  vertical-align: top;
+}
+.chat-tbl td.num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.chat-tbl tbody tr:hover { background: var(--purple-wash); }
+
+/* -------------------------------------------------------------------- waiting */
+/* Deliberately content-free: the user should not see which agent is being consulted
+   or any intermediate result, only that work is happening. */
+.thinking {
+  display: flex;
+  gap: 5px;
+  padding: 4px 0;
+  align-items: center;
+}
+.thinking span {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--purple);
+  animation: pulse 1.3s infinite ease-in-out;
+}
+.thinking span:nth-child(2) { animation-delay: .17s; }
+.thinking span:nth-child(3) { animation-delay: .34s; }
+@keyframes pulse {
+  0%, 80%, 100% { transform: scale(.65); opacity: .3; }
+  40% { transform: scale(1); opacity: 1; }
+}
+
+.live { white-space: pre-wrap; }
+.live::after {
+  content: "";
+  display: inline-block;
+  width: 7px;
+  height: 15px;
+  margin-left: 2px;
+  vertical-align: -2px;
+  background: var(--purple);
+  animation: blink 1s steps(2, start) infinite;
+}
+@keyframes blink { 50% { opacity: 0; } }
+
+.err {
+  color: var(--bad);
+  background: #fdf2f6;
+  border: 1px solid #f6d6e3;
+  border-radius: 8px;
+  padding: 10px 13px;
+}
+
+@media (max-width: 720px) {
+  .hero h1 { font-size: 23px; }
+  .stage { padding: 0 18px; }
+  body.chatting .composer { padding: 12px 18px 18px; }
+  .starters-grid { grid-template-columns: 1fr; }
+}

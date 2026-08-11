@@ -1,0 +1,27 @@
+# YOUR workspace configuration — never commit this
+config.yaml
+
+# generated artefacts (recreated by setup.py)
+data/*.csv
+docs_out/
+docs/diagrams/*.png
+!docs/diagrams/architecture.png
+
+# python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.env
+
+# tooling / os
+.DS_Store
+.idea/
+.vscode/
+/tmp/
+*.log
+
+# credentials, in case anything lands here by accident
+*.pem
+*.key
+.databrickscfg

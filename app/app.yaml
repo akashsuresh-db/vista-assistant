@@ -1,0 +1,10 @@
+command: ["uvicorn", "backend.main:app", "--host", "0.0.0.0", "--port", "8000"]
+env:
+  # Agent Bricks Supervisor endpoint. Set after the agent is created in the UI
+  # (Agent Bricks has no creation API). The deploy_app.sh script writes this automatically.
+  - name: SUPERVISOR_ENDPOINT
+    value: ""
+  # Genie space ID. Set by build_genie_space.py. The deploy_app.sh script can read this
+  # from config.yaml automatically.
+  - name: GENIE_SPACE_ID
+    value: ""
