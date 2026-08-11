@@ -20,7 +20,7 @@ for the Knowledge Assistant or the Supervisor Agent — those are click-by-click
 | Python 3.10+ | `python --version` |
 
 ```bash
-git clone https://github.com/akash-s_data/vista-assistant.git
+git clone https://github.com/akashsuresh-db/vista-assistant.git
 cd vista-assistant
 pip install -r requirements.txt
 databricks auth login --profile my-workspace

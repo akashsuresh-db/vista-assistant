@@ -54,7 +54,7 @@ Two prerequisites: a Databricks workspace with **Agent Bricks** and **Databricks
 enabled, and a SQL warehouse.
 
 ```bash
-git clone https://github.com/akash-s_data/vista-assistant.git
+git clone https://github.com/akashsuresh-db/vista-assistant.git
 cd vista-assistant
 pip install -r requirements.txt
 
